@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { RoomService } from '../services/room.service';
-import { IRoom, RoomStatus } from '../types/room.types';
+import { CreateRoomDto, UpdateRoomDto, UpdateRoomStatusDto } from '../dtos/room.dto';
 
 export class RoomController {
   private roomService: RoomService;
@@ -11,7 +11,7 @@ export class RoomController {
 
   async createRoom(req: Request, res: Response): Promise<void> {
     try {
-      const roomData = req.body as Omit<IRoom, 'createdAt' | 'updatedAt'>;
+      const roomData = req.body as CreateRoomDto;
       const room = await this.roomService.createRoom(roomData);
       res.status(201).json(room);
     } catch (error) {
@@ -56,7 +56,8 @@ export class RoomController {
 
   async updateRoom(req: Request, res: Response): Promise<void> {
     try {
-      const room = await this.roomService.updateRoom(req.params.id, req.body);
+      const roomData = req.body as UpdateRoomDto;
+      const room = await this.roomService.updateRoom(req.params.id, roomData);
       if (!room) {
         res.status(404).json({ error: 'Room not found' });
         return;
