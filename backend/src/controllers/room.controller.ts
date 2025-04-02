@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { RoomService } from '../services/room.service';
 import { CreateRoomDto, UpdateRoomDto } from '../dtos/room.dto';
-import { RoomStatus } from 'src/types/room.types';
+import { RoomStatus } from '../types/room.types';
+import { ResponseUtil } from '../utils/response.util';
+
 export class RoomController {
   private roomService: RoomService;
 
@@ -13,18 +15,18 @@ export class RoomController {
     try {
       const roomData = req.body as CreateRoomDto;
       const room = await this.roomService.createRoom(roomData);
-      res.status(201).json(room);
+      ResponseUtil.success(res, room, 'Room created successfully', 201);
     } catch (error) {
-      res.status(400).json({ error: 'Failed to create room' });
+      ResponseUtil.error(res, 'Failed to create room', 400);
     }
   }
 
   async getAllRooms(_req: Request, res: Response): Promise<void> {
     try {
       const rooms = await this.roomService.getAllRooms();
-      res.status(200).json(rooms);
+      ResponseUtil.success(res, rooms, 'Rooms retrieved successfully');
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch rooms' });
+      ResponseUtil.error(res, 'Failed to fetch rooms');
     }
   }
 
@@ -32,12 +34,12 @@ export class RoomController {
     try {
       const room = await this.roomService.getRoomById(req.params.id);
       if (!room) {
-        res.status(404).json({ error: 'Room not found' });
+        ResponseUtil.error(res, 'Room not found', 404);
         return;
       }
-      res.status(200).json(room);
+      ResponseUtil.success(res, room, 'Room retrieved successfully');
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch room' });
+      ResponseUtil.error(res, 'Failed to fetch room');
     }
   }
 
@@ -45,12 +47,12 @@ export class RoomController {
     try {
       const room = await this.roomService.getRoomByColor(req.params.color);
       if (!room) {
-        res.status(404).json({ error: 'Room not found' });
+        ResponseUtil.error(res, 'Room not found', 404);
         return;
       }
-      res.status(200).json(room);
+      ResponseUtil.success(res, room, 'Room retrieved successfully');
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch room' });
+      ResponseUtil.error(res, 'Failed to fetch room');
     }
   }
 
@@ -59,12 +61,12 @@ export class RoomController {
       const roomData = req.body as UpdateRoomDto;
       const room = await this.roomService.updateRoom(req.params.id, roomData);
       if (!room) {
-        res.status(404).json({ error: 'Room not found' });
+        ResponseUtil.error(res, 'Room not found', 404);
         return;
       }
-      res.status(200).json(room);
+      ResponseUtil.success(res, room, 'Room updated successfully');
     } catch (error) {
-      res.status(400).json({ error: 'Failed to update room' });
+      ResponseUtil.error(res, 'Failed to update room', 400);
     }
   }
 
@@ -72,12 +74,12 @@ export class RoomController {
     try {
       const success = await this.roomService.deleteRoom(req.params.id);
       if (!success) {
-        res.status(404).json({ error: 'Room not found' });
+        ResponseUtil.error(res, 'Room not found', 404);
         return;
       }
-      res.status(204).send();
+      ResponseUtil.success(res, undefined, 'Room deleted successfully', 204);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to delete room' });
+      ResponseUtil.error(res, 'Failed to delete room');
     }
   }
 
@@ -86,12 +88,12 @@ export class RoomController {
       const { status } = req.body as { status: RoomStatus };
       const room = await this.roomService.updateRoomStatus(req.params.id, status);
       if (!room) {
-        res.status(404).json({ error: 'Room not found' });
+        ResponseUtil.error(res, 'Room not found', 404);
         return;
       }
-      res.status(200).json(room);
+      ResponseUtil.success(res, room, 'Room status updated successfully');
     } catch (error) {
-      res.status(400).json({ error: 'Failed to update room status' });
+      ResponseUtil.error(res, 'Failed to update room status', 400);
     }
   }
 } 

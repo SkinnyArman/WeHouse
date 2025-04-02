@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BannedCustomerService } from '../services/bannedCustomer.service';
 import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
+import { ResponseUtil } from '../utils/response.util';
 
 export class BannedCustomerController {
   private bannedCustomerService: BannedCustomerService;
@@ -13,9 +14,9 @@ export class BannedCustomerController {
     try {
       const customerData = req.body as CreateBannedCustomerDto;
       const customer = await this.bannedCustomerService.createBannedCustomer(customerData);
-      res.status(201).json(customer);
+      ResponseUtil.success(res, customer, 'Banned customer record created successfully', 201);
     } catch (error) {
-      res.status(400).json({ error: 'Failed to create banned customer record' });
+      ResponseUtil.error(res, 'Failed to create banned customer record', 400);
     }
   }
 
@@ -25,9 +26,9 @@ export class BannedCustomerController {
       const limit = parseInt(req.query.limit as string) || 10;
       
       const result = await this.bannedCustomerService.getBannedCustomers(page, limit);
-      res.status(200).json(result);
+      ResponseUtil.success(res, result, 'Banned customers retrieved successfully');
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch banned customers' });
+      ResponseUtil.error(res, 'Failed to fetch banned customers');
     }
   }
 
@@ -35,12 +36,12 @@ export class BannedCustomerController {
     try {
       const customer = await this.bannedCustomerService.getBannedCustomerById(req.params.id);
       if (!customer) {
-        res.status(404).json({ error: 'Banned customer record not found' });
+        ResponseUtil.error(res, 'Banned customer record not found', 404);
         return;
       }
-      res.status(200).json(customer);
+      ResponseUtil.success(res, customer, 'Banned customer retrieved successfully');
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch banned customer' });
+      ResponseUtil.error(res, 'Failed to fetch banned customer');
     }
   }
 
@@ -49,12 +50,12 @@ export class BannedCustomerController {
       const customerData = req.body as UpdateBannedCustomerDto;
       const customer = await this.bannedCustomerService.updateBannedCustomer(req.params.id, customerData);
       if (!customer) {
-        res.status(404).json({ error: 'Banned customer record not found' });
+        ResponseUtil.error(res, 'Banned customer record not found', 404);
         return;
       }
-      res.status(200).json(customer);
+      ResponseUtil.success(res, customer, 'Banned customer updated successfully');
     } catch (error) {
-      res.status(400).json({ error: 'Failed to update banned customer record' });
+      ResponseUtil.error(res, 'Failed to update banned customer record', 400);
     }
   }
 
@@ -62,12 +63,12 @@ export class BannedCustomerController {
     try {
       const success = await this.bannedCustomerService.deleteBannedCustomer(req.params.id);
       if (!success) {
-        res.status(404).json({ error: 'Banned customer record not found' });
+        ResponseUtil.error(res, 'Banned customer record not found', 404);
         return;
       }
-      res.status(204).send();
+      ResponseUtil.success(res, undefined, 'Banned customer deleted successfully', 204);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to delete banned customer record' });
+      ResponseUtil.error(res, 'Failed to delete banned customer record');
     }
   }
 } 
