@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BannedCustomerService } from '../services/bannedCustomer.service';
-import { IBannedCustomer } from '../types/bannedCustomer.types';
+import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
 
 export class BannedCustomerController {
   private bannedCustomerService: BannedCustomerService;
@@ -11,7 +11,7 @@ export class BannedCustomerController {
 
   async createBannedCustomer(req: Request, res: Response): Promise<void> {
     try {
-      const customerData = req.body as Omit<IBannedCustomer, 'createdAt'>;
+      const customerData = req.body as CreateBannedCustomerDto;
       const customer = await this.bannedCustomerService.createBannedCustomer(customerData);
       res.status(201).json(customer);
     } catch (error) {
@@ -28,6 +28,33 @@ export class BannedCustomerController {
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch banned customers' });
+    }
+  }
+
+  async getBannedCustomerById(req: Request, res: Response): Promise<void> {
+    try {
+      const customer = await this.bannedCustomerService.getBannedCustomerById(req.params.id);
+      if (!customer) {
+        res.status(404).json({ error: 'Banned customer record not found' });
+        return;
+      }
+      res.status(200).json(customer);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch banned customer' });
+    }
+  }
+
+  async updateBannedCustomer(req: Request, res: Response): Promise<void> {
+    try {
+      const customerData = req.body as UpdateBannedCustomerDto;
+      const customer = await this.bannedCustomerService.updateBannedCustomer(req.params.id, customerData);
+      if (!customer) {
+        res.status(404).json({ error: 'Banned customer record not found' });
+        return;
+      }
+      res.status(200).json(customer);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to update banned customer record' });
     }
   }
 

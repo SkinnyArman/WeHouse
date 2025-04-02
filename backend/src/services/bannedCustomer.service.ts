@@ -1,9 +1,9 @@
 import { BannedCustomer } from '../models/BannedCustomer';
-import { IBannedCustomer, ICreateBannedCustomer } from '../types/bannedCustomer.types';
-import { Types } from 'mongoose';
+import { IBannedCustomer } from '../types/bannedCustomer.types';
+import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
 
 export class BannedCustomerService {
-  async createBannedCustomer(customerData: ICreateBannedCustomer): Promise<IBannedCustomer> {
+  async createBannedCustomer(customerData: CreateBannedCustomerDto): Promise<IBannedCustomer> {
     const customer = new BannedCustomer(customerData);
     return await customer.save();
   }
@@ -29,7 +29,15 @@ export class BannedCustomerService {
     };
   }
 
-  async deleteBannedCustomer(id: Types.ObjectId): Promise<boolean> {
+  async getBannedCustomerById(id: string): Promise<IBannedCustomer | null> {
+    return await BannedCustomer.findById(id);
+  }
+
+  async updateBannedCustomer(id: string, customerData: UpdateBannedCustomerDto): Promise<IBannedCustomer | null> {
+    return await BannedCustomer.findByIdAndUpdate(id, customerData, { new: true });
+  }
+
+  async deleteBannedCustomer(id: string): Promise<boolean> {
     const result = await BannedCustomer.findByIdAndDelete(id);
     return result !== null;
   }
