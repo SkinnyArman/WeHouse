@@ -1,8 +1,9 @@
 import { BannedCustomer } from '../models/BannedCustomer';
-import { IBannedCustomer } from '../types/bannedCustomer.types';
+import { IBannedCustomer, ICreateBannedCustomer } from '../types/bannedCustomer.types';
+import { Types } from 'mongoose';
 
 export class BannedCustomerService {
-  async createBannedCustomer(customerData: Omit<IBannedCustomer, 'createdAt'>): Promise<IBannedCustomer> {
+  async createBannedCustomer(customerData: ICreateBannedCustomer): Promise<IBannedCustomer> {
     const customer = new BannedCustomer(customerData);
     return await customer.save();
   }
@@ -28,7 +29,7 @@ export class BannedCustomerService {
     };
   }
 
-  async deleteBannedCustomer(id: string): Promise<boolean> {
+  async deleteBannedCustomer(id: Types.ObjectId): Promise<boolean> {
     const result = await BannedCustomer.findByIdAndDelete(id);
     return result !== null;
   }
