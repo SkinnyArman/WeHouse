@@ -58,7 +58,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoom);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 201,
+        message: 'Room created successfully',
+        data: mockRoom
+      });
     });
 
     it('should handle creation error', async () => {
@@ -83,7 +88,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to create room'
+        status: 'Error',
+        statusCode: 400,
+        message: 'Failed to create room'
       });
     });
   });
@@ -99,7 +106,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRooms);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Rooms retrieved successfully',
+        data: mockRooms
+      });
     });
 
     it('should handle fetch error', async () => {
@@ -112,7 +124,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(500);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to fetch rooms'
+        status: 'Error',
+        statusCode: 500,
+        message: 'Failed to fetch rooms'
       });
     });
   });
@@ -131,7 +145,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoom);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room retrieved successfully',
+        data: mockRoom
+      });
     });
 
     it('should handle room not found', async () => {
@@ -148,7 +167,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Room not found'
+        status: 'Error',
+        statusCode: 404,
+        message: 'Room not found'
       });
     });
 
@@ -166,7 +187,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(500);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to fetch room'
+        status: 'Error',
+        statusCode: 500,
+        message: 'Failed to fetch room'
       });
     });
   });
@@ -185,7 +208,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoom);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room retrieved successfully',
+        data: mockRoom
+      });
     });
 
     it('should handle room not found', async () => {
@@ -202,7 +230,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Room not found'
+        status: 'Error',
+        statusCode: 404,
+        message: 'Room not found'
       });
     });
 
@@ -220,7 +250,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(500);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to fetch room'
+        status: 'Error',
+        statusCode: 500,
+        message: 'Failed to fetch room'
       });
     });
   });
@@ -241,7 +273,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(updatedRoom);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room updated successfully',
+        data: updatedRoom
+      });
     });
 
     it('should handle room not found', async () => {
@@ -259,7 +296,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Room not found'
+        status: 'Error',
+        statusCode: 404,
+        message: 'Room not found'
       });
     });
 
@@ -278,7 +317,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to update room'
+        status: 'Error',
+        statusCode: 400,
+        message: 'Failed to update room'
       });
     });
   });
@@ -297,7 +338,11 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(204);
-      expect(mockResponse.send).toHaveBeenCalled();
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 204,
+        message: 'Room deleted successfully'
+      });
     });
 
     it('should handle room not found', async () => {
@@ -314,7 +359,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Room not found'
+        status: 'Error',
+        statusCode: 404,
+        message: 'Room not found'
       });
     });
 
@@ -332,7 +379,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(500);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to delete room'
+        status: 'Error',
+        statusCode: 500,
+        message: 'Failed to delete room'
       });
     });
   });
@@ -353,7 +402,12 @@ describe('RoomController', () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(updatedRoom);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room status updated successfully',
+        data: updatedRoom
+      });
     });
 
     it('should handle room not found', async () => {
@@ -371,7 +425,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Room not found'
+        status: 'Error',
+        statusCode: 404,
+        message: 'Room not found'
       });
     });
 
@@ -390,7 +446,9 @@ describe('RoomController', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Failed to update room status'
+        status: 'Error',
+        statusCode: 400,
+        message: 'Failed to update room status'
       });
     });
   });
