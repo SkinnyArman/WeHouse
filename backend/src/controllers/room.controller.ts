@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { RoomService } from '../services/room.service';
-import { CreateRoomDto, UpdateRoomDto, UpdateRoomStatusDto } from '../dtos/room.dto';
-
+import { CreateRoomDto, UpdateRoomDto } from '../dtos/room.dto';
+import { RoomStatus } from 'src/types/room.types';
 export class RoomController {
   private roomService: RoomService;
 
@@ -19,7 +19,7 @@ export class RoomController {
     }
   }
 
-  async getAllRooms(req: Request, res: Response): Promise<void> {
+  async getAllRooms(_req: Request, res: Response): Promise<void> {
     try {
       const rooms = await this.roomService.getAllRooms();
       res.status(200).json(rooms);
