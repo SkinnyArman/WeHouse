@@ -59,30 +59,6 @@
 
 /**
  * @swagger
- * /api/banned-customers/{id}:
- *   get:
- *     summary: Get ban record by ID
- *     tags: [Banned Customers]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Ban record ID
- *     responses:
- *       200:
- *         description: Ban record found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BannedCustomerResponse'
- *       404:
- *         description: Ban record not found
- */
-
-/**
- * @swagger
  * /api/banned-customers:
  *   get:
  *     summary: Get all banned customers

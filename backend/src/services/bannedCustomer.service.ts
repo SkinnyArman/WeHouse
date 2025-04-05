@@ -29,10 +29,6 @@ export class BannedCustomerService {
     };
   }
 
-  async getBannedCustomerById(id: string): Promise<IBannedCustomer | null> {
-    return await BannedCustomer.findById(id);
-  }
-
   async deleteBannedCustomer(id: string): Promise<boolean> {
     const result = await BannedCustomer.findByIdAndDelete(id);
     return result !== null;

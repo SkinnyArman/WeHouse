@@ -32,19 +32,6 @@ export class BannedCustomerController {
     }
   }
 
-  async getBannedCustomerById(req: Request, res: Response): Promise<void> {
-    try {
-      const customer = await this.bannedCustomerService.getBannedCustomerById(req.params.id);
-      if (!customer) {
-        ResponseUtil.error(res, 'Banned customer record not found', 404);
-        return;
-      }
-      ResponseUtil.success(res, customer, 'Banned customer retrieved successfully');
-    } catch (error) {
-      ResponseUtil.error(res, 'Failed to fetch banned customer');
-    }
-  }
-
   async deleteBannedCustomer(req: Request, res: Response): Promise<void> {
     try {
       const success = await this.bannedCustomerService.deleteBannedCustomer(req.params.id);

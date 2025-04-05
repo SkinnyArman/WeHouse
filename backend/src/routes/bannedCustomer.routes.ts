@@ -9,9 +9,6 @@ const bannedCustomerController = new BannedCustomerController();
 // Ban a customer
 router.post('/', validateDto(CreateBannedCustomerDto), bannedCustomerController.createBannedCustomer.bind(bannedCustomerController));
 
-// Get ban record by ID
-router.get('/:id', bannedCustomerController.getBannedCustomerById.bind(bannedCustomerController));
-
 // Get all banned customers
 router.get('/', bannedCustomerController.getBannedCustomers.bind(bannedCustomerController));
 
