@@ -2,12 +2,13 @@ import { Types } from 'mongoose';
 
 export interface IBannedCustomer {
   _id: Types.ObjectId;
-  customerName: string;
-  cancellationReason: string;
+  customerId: string;
+  reason: string;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ICreateBannedCustomer {
-  customerName: string;
-  cancellationReason: string;
+  customerId: string;
+  reason: string;
 } 

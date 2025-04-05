@@ -1,6 +1,6 @@
 import { BannedCustomer } from '../models/BannedCustomer';
 import { IBannedCustomer } from '../types/bannedCustomer.types';
-import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
+import { CreateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
 
 export class BannedCustomerService {
   async createBannedCustomer(customerData: CreateBannedCustomerDto): Promise<IBannedCustomer> {
@@ -31,10 +31,6 @@ export class BannedCustomerService {
 
   async getBannedCustomerById(id: string): Promise<IBannedCustomer | null> {
     return await BannedCustomer.findById(id);
-  }
-
-  async updateBannedCustomer(id: string, customerData: UpdateBannedCustomerDto): Promise<IBannedCustomer | null> {
-    return await BannedCustomer.findByIdAndUpdate(id, customerData, { new: true });
   }
 
   async deleteBannedCustomer(id: string): Promise<boolean> {

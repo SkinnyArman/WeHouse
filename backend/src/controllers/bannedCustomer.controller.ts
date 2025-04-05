@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BannedCustomerService } from '../services/bannedCustomer.service';
-import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
+import { CreateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
 import { ResponseUtil } from '../utils/response.util';
 
 export class BannedCustomerController {
@@ -42,20 +42,6 @@ export class BannedCustomerController {
       ResponseUtil.success(res, customer, 'Banned customer retrieved successfully');
     } catch (error) {
       ResponseUtil.error(res, 'Failed to fetch banned customer');
-    }
-  }
-
-  async updateBannedCustomer(req: Request, res: Response): Promise<void> {
-    try {
-      const customerData = req.body as UpdateBannedCustomerDto;
-      const customer = await this.bannedCustomerService.updateBannedCustomer(req.params.id, customerData);
-      if (!customer) {
-        ResponseUtil.error(res, 'Banned customer record not found', 404);
-        return;
-      }
-      ResponseUtil.success(res, customer, 'Banned customer updated successfully');
-    } catch (error) {
-      ResponseUtil.error(res, 'Failed to update banned customer record', 400);
     }
   }
 

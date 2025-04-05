@@ -14,10 +14,6 @@
  *         reason:
  *           type: string
  *           description: Reason for banning
- *         bannedUntil:
- *           type: string
- *           format: date-time
- *           description: Ban expiration date
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -39,7 +35,17 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/BannedCustomer'
+ *             type: object
+ *             properties:
+ *               customerId:
+ *                 type: string
+ *                 description: Customer ID
+ *               reason:
+ *                 type: string
+ *                 description: Reason for banning
+ *             required:
+ *               - customerId
+ *               - reason
  *     responses:
  *       201:
  *         description: Customer banned successfully
@@ -81,45 +87,37 @@
  *   get:
  *     summary: Get all banned customers
  *     tags: [Banned Customers]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
  *     responses:
  *       200:
  *         description: List of banned customers
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/BannedCustomerResponse'
- */
-
-/**
- * @swagger
- * /api/banned-customers/{id}:
- *   patch:
- *     summary: Update ban record
- *     tags: [Banned Customers]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Ban record ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/BannedCustomer'
- *     responses:
- *       200:
- *         description: Ban record updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BannedCustomerResponse'
- *       404:
- *         description: Ban record not found
+ *               type: object
+ *               properties:
+ *                 customers:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/BannedCustomerResponse'
+ *                 total:
+ *                   type: integer
+ *                   description: Total number of records
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Total number of pages
  */
 
 /**
