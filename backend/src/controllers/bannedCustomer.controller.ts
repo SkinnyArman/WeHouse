@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import { BannedCustomerService } from '../services/bannedCustomer.service';
 import { CreateBannedCustomerDto } from '../dtos/bannedCustomer.dto';
+import { PaginationDto } from '../dtos/pagination.dto';
+import { MongoIdDto } from '../dtos/id.dto';
 import { ResponseUtil } from '../utils/response.util';
+import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 
 export class BannedCustomerController {
   private bannedCustomerService: BannedCustomerService;
@@ -12,36 +16,44 @@ export class BannedCustomerController {
 
   async createBannedCustomer(req: Request, res: Response): Promise<void> {
     try {
-      const customerData = req.body as CreateBannedCustomerDto;
+      const customerData = plainToClass(CreateBannedCustomerDto, req.body);
+      await validateOrReject(customerData);
+      
       const customer = await this.bannedCustomerService.createBannedCustomer(customerData);
-      ResponseUtil.success(res, customer, 'Banned customer record created successfully', 201);
+      ResponseUtil.success(res, customer, 'Customer banned successfully', 201);
     } catch (error) {
-      ResponseUtil.error(res, 'Failed to create banned customer record', 400);
+      ResponseUtil.error(res, 'Failed to ban customer', 400);
     }
   }
 
   async getBannedCustomers(req: Request, res: Response): Promise<void> {
     try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
+      const paginationData = plainToClass(PaginationDto, req.query);
+      await validateOrReject(paginationData);
       
-      const result = await this.bannedCustomerService.getBannedCustomers(page, limit);
-      ResponseUtil.success(res, result, 'Banned customers retrieved successfully');
+      const result = await this.bannedCustomerService.getBannedCustomers(
+        paginationData.page,
+        paginationData.limit
+      );
+      ResponseUtil.success(res, result, 'Banned customers retrieved successfully', 200);
     } catch (error) {
-      ResponseUtil.error(res, 'Failed to fetch banned customers');
+      ResponseUtil.error(res, 'Failed to fetch banned customers', 500);
     }
   }
 
   async deleteBannedCustomer(req: Request, res: Response): Promise<void> {
     try {
-      const success = await this.bannedCustomerService.deleteBannedCustomer(req.params.id);
+      const params = plainToClass(MongoIdDto, req.params);
+      await validateOrReject(params);
+
+      const success = await this.bannedCustomerService.deleteBannedCustomer(params.id);
       if (!success) {
-        ResponseUtil.error(res, 'Banned customer record not found', 404);
+        ResponseUtil.error(res, 'Ban record not found', 404);
         return;
       }
-      ResponseUtil.success(res, undefined, 'Banned customer deleted successfully', 204);
+      res.status(204).send();
     } catch (error) {
-      ResponseUtil.error(res, 'Failed to delete banned customer record');
+      ResponseUtil.error(res, 'Failed to remove ban record', 500);
     }
   }
 } 
