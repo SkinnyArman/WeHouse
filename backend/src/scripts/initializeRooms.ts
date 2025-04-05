@@ -2,9 +2,12 @@ import { connectDB } from '../config/database';
 import { Room } from '../models/Room';
 import { IRoom, RoomStatus, RoomType } from '../types/room.types';
 
-const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
+// Define a type that excludes _id, createdAt, and updatedAt
+type RoomData = Omit<IRoom, '_id' | 'createdAt' | 'updatedAt'>;
+
+const rooms: RoomData[] = [
   {
-    color: 'Yellow',
+    color: 'yellow',
     capacity: 3,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -13,7 +16,7 @@ const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
     status: RoomStatus.ReadyForReservation
   },
   {
-    color: 'Blue',
+    color: 'blue',
     capacity: 2,
     type: RoomType.Private,
     twoPersonBeds: 0,
@@ -22,7 +25,7 @@ const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
     status: RoomStatus.ReadyForReservation
   },
   {
-    color: 'Purple',
+    color: 'purple',
     capacity: 2,
     type: RoomType.Private,
     twoPersonBeds: 0,
@@ -31,7 +34,7 @@ const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
     status: RoomStatus.ReadyForReservation
   },
   {
-    color: 'Green',
+    color: 'green',
     capacity: 2,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -40,7 +43,7 @@ const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
     status: RoomStatus.ReadyForReservation
   },
   {
-    color: 'Red',
+    color: 'red',
     capacity: 2,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -49,7 +52,7 @@ const rooms: Omit<IRoom, 'createdAt' | 'updatedAt'>[] = [
     status: RoomStatus.ReadyForReservation
   },
   {
-    color: 'Orange',
+    color: 'orange',
     capacity: 4,
     type: RoomType.Shared,
     twoPersonBeds: 0,

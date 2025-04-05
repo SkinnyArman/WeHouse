@@ -13,7 +13,7 @@ describe('RoomController', () => {
   let mockResponse: Partial<Response>;
   const mockRoom = {
     _id: new mongoose.Types.ObjectId(),
-    color: 'Yellow',
+    color: 'yellow',
     capacity: 3,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -91,6 +91,35 @@ describe('RoomController', () => {
         status: 'Error',
         statusCode: 400,
         message: 'Failed to create room'
+      });
+    });
+
+    it('should create room successfully (case-insensitive color)', async () => {
+      mockRequest = {
+        body: {
+          color: 'YELLOW',
+          capacity: 3,
+          type: RoomType.Private,
+          twoPersonBeds: 1,
+          onePersonBeds: 1,
+          rentPrice: 2100,
+          status: RoomStatus.ReadyForReservation
+        }
+      };
+
+      mockRoomService.createRoom.mockResolvedValue(mockRoom);
+
+      await roomController.createRoom(
+        mockRequest as Request,
+        mockResponse as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 201,
+        message: 'Room created successfully',
+        data: mockRoom
       });
     });
   });
@@ -255,6 +284,27 @@ describe('RoomController', () => {
         message: 'Failed to fetch room'
       });
     });
+
+    it('should return room by color (case-insensitive)', async () => {
+      mockRequest = {
+        params: { color: 'YELLOW' }
+      };
+
+      mockRoomService.getRoomByColor.mockResolvedValue(mockRoom);
+
+      await roomController.getRoomByColor(
+        mockRequest as Request,
+        mockResponse as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room retrieved successfully',
+        data: mockRoom
+      });
+    });
   });
 
   describe('updateRoom', () => {
@@ -320,6 +370,29 @@ describe('RoomController', () => {
         status: 'Error',
         statusCode: 400,
         message: 'Failed to update room'
+      });
+    });
+
+    it('should update room successfully (case-insensitive color)', async () => {
+      mockRequest = {
+        params: { id: mockRoom._id.toString() },
+        body: { color: 'BLUE' }
+      };
+
+      const updatedRoom = { ...mockRoom, color: 'blue' };
+      mockRoomService.updateRoom.mockResolvedValue(updatedRoom);
+
+      await roomController.updateRoom(
+        mockRequest as Request,
+        mockResponse as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        status: 'Success',
+        statusCode: 200,
+        message: 'Room updated successfully',
+        data: updatedRoom
       });
     });
   });

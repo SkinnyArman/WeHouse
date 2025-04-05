@@ -8,7 +8,8 @@ const roomSchema = new Schema<IRoom>(
       required: [true, 'color is required'], 
       unique: true,
       trim: true,
-      minlength: [1, 'color cannot be empty']
+      minlength: [1, 'color cannot be empty'],
+      lowercase: true
     },
     capacity: { 
       type: Number, 

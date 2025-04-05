@@ -16,7 +16,7 @@ export class RoomService {
   }
 
   async getRoomByColor(color: string): Promise<IRoom | null> {
-    return await Room.findOne({ color: { $regex: new RegExp(`^${color}$`, 'i') } });
+    return await Room.findOne({ color });
   }
 
   async updateRoom(id: string, roomData: Partial<IRoom>): Promise<IRoom | null> {

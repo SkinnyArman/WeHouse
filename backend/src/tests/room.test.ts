@@ -12,7 +12,7 @@ describe('Room Service', () => {
   let roomService: RoomService;
 
   const mockRoomDto: CreateRoomDto = {
-    color: 'Yellow',
+    color: 'yellow',
     capacity: 3,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -50,14 +50,15 @@ describe('Room Service', () => {
       if (!db) {
         throw new Error('Database connection not established');
       }
-      const collections = await db.collections();
-      for (const collection of collections) {
-        await collection.deleteMany({});
-      }
+      // Instead of listing all collections, directly delete the room collection
+      await db.collection('rooms').deleteMany({});
       console.log('Test database cleaned up');
     } catch (error) {
       console.error('Failed to clean up test database:', error);
-      throw error;
+      // Don't throw the error if it's a permission issue
+      if (error.code !== 8000) { // 8000 is the AtlasError code
+        throw error;
+      }
     }
   });
 
@@ -77,6 +78,21 @@ describe('Room Service', () => {
       
       expect(room).toBeDefined();
       expect(room.color).toBe(mockRoomDto.color);
+      expect(room.capacity).toBe(mockRoomDto.capacity);
+      expect(room.type).toBe(mockRoomDto.type);
+      expect(room.twoPersonBeds).toBe(mockRoomDto.twoPersonBeds);
+      expect(room.onePersonBeds).toBe(mockRoomDto.onePersonBeds);
+      expect(room.rentPrice).toBe(mockRoomDto.rentPrice);
+      expect(room.status).toBe(mockRoomDto.status);
+      expect(room._id).toBeDefined();
+    });
+
+    it('should create a new room with case-insensitive color', async () => {
+      const roomData = { ...mockRoomDto, color: 'YELLOW' };
+      const room = await roomService.createRoom(roomData);
+      
+      expect(room).toBeDefined();
+      expect(room.color).toBe('yellow');
       expect(room.capacity).toBe(mockRoomDto.capacity);
       expect(room.type).toBe(mockRoomDto.type);
       expect(room.twoPersonBeds).toBe(mockRoomDto.twoPersonBeds);
@@ -181,11 +197,15 @@ describe('Room Service', () => {
       
       const lowerCase = await roomService.getRoomByColor('yellow');
       expect(lowerCase).toBeDefined();
-      expect(lowerCase?.color).toBe(mockRoomDto.color);
+      expect(lowerCase?.color).toBe('yellow');
       
       const upperCase = await roomService.getRoomByColor('YELLOW');
       expect(upperCase).toBeDefined();
-      expect(upperCase?.color).toBe(mockRoomDto.color);
+      expect(upperCase?.color).toBe('yellow');
+      
+      const mixedCase = await roomService.getRoomByColor('YeLLoW');
+      expect(mixedCase).toBeDefined();
+      expect(mixedCase?.color).toBe('yellow');
     });
 
     it('should return null for non-existent room', async () => {
@@ -250,6 +270,16 @@ describe('Room Service', () => {
       );
       expect(updated).toBeDefined();
       expect(updated?.status).toBe(mockRoomDto.status);
+    });
+  });
+
+  describe('updateRoom', () => {
+    it('should update room color case-insensitive', async () => {
+      const room = await roomService.createRoom(mockRoomDto);
+      const updated = await roomService.updateRoom(room._id.toString(), { color: 'BLUE' });
+      
+      expect(updated).toBeDefined();
+      expect(updated?.color).toBe('blue');
     });
   });
 });

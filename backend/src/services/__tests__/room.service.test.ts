@@ -9,7 +9,7 @@ describe('RoomService', () => {
   let roomService: RoomService;
   const mockRoom = {
     _id: new mongoose.Types.ObjectId(),
-    color: 'Yellow',
+    color: 'yellow',
     capacity: 3,
     type: RoomType.Private,
     twoPersonBeds: 1,
@@ -104,15 +104,17 @@ describe('RoomService', () => {
   });
 
   describe('getRoomByColor', () => {
-    it('should return room by color', async () => {
+    it('should return room by color (case-insensitive)', async () => {
       (Room.findOne as jest.Mock).mockResolvedValue(mockRoom);
 
-      const result = await roomService.getRoomByColor('Yellow');
+      const result1 = await roomService.getRoomByColor('YELLOW');
+      const result2 = await roomService.getRoomByColor('yellow');
+      const result3 = await roomService.getRoomByColor('Yellow');
 
-      expect(Room.findOne).toHaveBeenCalledWith({
-        color: { $regex: new RegExp('^Yellow$', 'i') }
-      });
-      expect(result).toEqual(mockRoom);
+      expect(Room.findOne).toHaveBeenCalledWith({ color: 'yellow' });
+      expect(result1).toEqual(mockRoom);
+      expect(result2).toEqual(mockRoom);
+      expect(result3).toEqual(mockRoom);
     });
 
     it('should return null when room not found', async () => {

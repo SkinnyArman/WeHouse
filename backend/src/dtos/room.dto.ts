@@ -1,9 +1,11 @@
 import { RoomStatus, RoomType } from '../types/room.types';
 import { IsString, IsNumber, IsEnum, Min, IsNotEmpty } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateRoomDto {
   @IsString()
   @IsNotEmpty({ message: 'Color is required' })
+  @Transform(({ value }) => value?.toLowerCase())
   color: string;
 
   @IsNumber()
@@ -37,6 +39,7 @@ export class UpdateRoomStatusDto {
 export class UpdateRoomDto {
   @IsString()
   @IsNotEmpty({ message: 'Color is required' })
+  @Transform(({ value }) => value?.toLowerCase())
   color?: string;
 
   @IsNumber()
