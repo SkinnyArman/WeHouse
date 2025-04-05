@@ -6,10 +6,19 @@ import { CreateBannedCustomerDto, UpdateBannedCustomerDto } from '../dtos/banned
 const router = Router();
 const bannedCustomerController = new BannedCustomerController();
 
+// Ban a customer
 router.post('/', validateDto(CreateBannedCustomerDto), bannedCustomerController.createBannedCustomer.bind(bannedCustomerController));
-router.get('/', bannedCustomerController.getBannedCustomers.bind(bannedCustomerController));
+
+// Get ban record by ID
 router.get('/:id', bannedCustomerController.getBannedCustomerById.bind(bannedCustomerController));
-router.put('/:id', validateDto(UpdateBannedCustomerDto), bannedCustomerController.updateBannedCustomer.bind(bannedCustomerController));
+
+// Get all banned customers
+router.get('/', bannedCustomerController.getBannedCustomers.bind(bannedCustomerController));
+
+// Update ban record
+router.patch('/:id', validateDto(UpdateBannedCustomerDto), bannedCustomerController.updateBannedCustomer.bind(bannedCustomerController));
+
+// Remove ban record
 router.delete('/:id', bannedCustomerController.deleteBannedCustomer.bind(bannedCustomerController));
 
 export default router; 

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
-export const validateDto = (dtoClass: any) => {
+export const validateDto = (dtoClass: any): ((req: Request, res: Response, next: NextFunction) => Promise<void | Response>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const dtoObject = plainToInstance(dtoClass, req.body);
     const errors = await validate(dtoObject);
@@ -20,6 +20,6 @@ export const validateDto = (dtoClass: any) => {
     }
 
     req.body = dtoObject;
-    next();
+    return next();
   };
 }; 

@@ -6,15 +6,25 @@ import { CreateRoomDto, UpdateRoomDto, UpdateRoomStatusDto } from '../dtos/room.
 const router = Router();
 const roomController = new RoomController();
 
-// Room CRUD routes
+// Create a new room
 router.post('/', validateDto(CreateRoomDto), roomController.createRoom.bind(roomController));
+
+// Get a room by color
 router.get('/:color', roomController.getRoomByColor.bind(roomController));
+
+// Get a room by ID
 router.get('/:id', roomController.getRoomById.bind(roomController));
+
+// Get all rooms
 router.get('/', roomController.getAllRooms.bind(roomController));
+
+// Update a room
 router.patch('/:id', validateDto(UpdateRoomDto), roomController.updateRoom.bind(roomController));
+
+// Delete a room
 router.delete('/:id', roomController.deleteRoom.bind(roomController));
 
-// Room status update route
+// Update room status
 router.patch('/:id/status', validateDto(UpdateRoomStatusDto), roomController.updateRoomStatus.bind(roomController));
 
 export default router; 
